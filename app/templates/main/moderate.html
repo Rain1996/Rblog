@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Rblog - {{ title }} Moderation{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1>{{ title }} Moderation</h1>
+</div>
+{% set moderate = True %}
+{% if title == 'Comment' %}
+	{% include 'main/_comments.html' %}
+	{% if pagination %}
+	<div class="pagination">
+		{{ macros.pagination_widget(pagination, 'main.moderate_comments') }}
+	</div>
+	{% endif %}
+{% else %}
+	{% include 'main/_posts.html' %}
+	{% if pagination %}
+	<div class="pagination">
+	{{ macros.pagination_widget(pagination, 'main.moderate_posts') }}
+	</div>
+	{% endif %}
+{% endif %}
+{% endblock %}

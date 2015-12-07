@@ -14,7 +14,7 @@ class SeleniumTestCase(unittest.TestCase):
     def setUpClass(cls):
         # start Chrome
         try:
-            cls.client = webdriver.Chrome()
+            cls.client = webdriver.Chrome("C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe")
         except:
             pass
 
@@ -78,8 +78,8 @@ class SeleniumTestCase(unittest.TestCase):
                                   self.client.page_source))
 
         # navigate to login page
-        self.client.find_element_by_link_text('Log In').click()
-        self.assertTrue('<h1>Login</h1>' in self.client.page_source)
+        self.client.find_element_by_link_text('Sign In').click()
+        self.assertTrue('<h1>Sign In</h1>' in self.client.page_source)
 
         # login
         self.client.find_element_by_name('email').\

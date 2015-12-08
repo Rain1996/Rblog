@@ -2,12 +2,22 @@ from datetime import datetime
 from flask import render_template, url_for, request, redirect, flash, current_app, \
     abort, make_response
 from flask.ext.login import login_required, current_user
+from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from .. import db
 from ..models import User, Role, Permission, Post, Comment
 from ..decorators import admin_required, permission_required
 
+
+@main.after_app_request
+def after_request(response):
+    for query in get_debug_queries():
+        if query.duration >= current_app.config['RBLOG_SLOW_DB_QUERY_TIME']:
+            current_app.logger.warning(
+                'Slow query: %s\nParamenters: %s\nDuration: %fs\nContext: %s\n'
+                % (query.statement, query.paramenters, query.duration, query.context))
+    return response
 
 @main.route('/', methods = ['GET', 'POST'])
 def index():

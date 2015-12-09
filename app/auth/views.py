@@ -57,6 +57,7 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.index'))
     if current_user.confirm(token):
+        db.session.commit()
         flash('You have confirmed your account.Thanks!')
     else:
         flash('The confirmation link is invalid or has expired.')
@@ -85,6 +86,7 @@ def change_password():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.new_password.data
             db.session.add(current_user)
+            db.session.commit()
             flash("You have changed your password")
             return redirect(url_for('main.index'))
         else:
@@ -125,6 +127,7 @@ def reset_password(token):
             flash('The user unexits!')
             return render_template('auth/reset_password.html', form = form)
         if user.reset_password(token, form.new_password.data):
+            db.session.commit()
             flash('You have reset your password.')
             return redirect(url_for('auth.login'))
         else:
@@ -151,6 +154,7 @@ def change_email_request():
 @login_required
 def change_email(token):
     if current_user.change_email(token):
+        db.session.commit()
         flash("You have changed your email!")
     else:
         flash("Invalid request")

@@ -58,6 +58,7 @@ def write_blog():
         post = Post(body = form.body.data,
                     author = current_user._get_current_object())
         db.session.add(post)
+        db.session.commit()
         return redirect(url_for('main.index'))
     return render_template('main/write_blog.html', form = form)
 
@@ -70,6 +71,7 @@ def edit_profile():
         current_user.location = form.location.data
         current_user.about_me = form.about_me.data
         db.session.add(current_user)
+        db.session.commit()
         flash('Your profile has been updated.')
         return redirect(url_for('.user', username = current_user.username))
     form.name.data = current_user.name
@@ -92,6 +94,7 @@ def edit_profile_admin(id):
         user.location = form.location.data
         user.about_me = form.about_me.data
         db.session.add(user)
+        db.session.commit()
         flash('The profile has been updated.')
         return redirect(url_for('.user', username = user.username))
     form.email.data = user.email
@@ -111,6 +114,7 @@ def post(id):
         comment = Comment(body = form.body.data, post = post,
                           author = current_user._get_current_object())
         db.session.add(comment)
+        db.session.commit()
         flash("Your comment has been published.")
         return redirect(url_for('main.post', id = post.id, page = -1))
     page = request.args.get('page', 1, type = int)
@@ -137,6 +141,7 @@ def edit(id):
         post.body = form.body.data
         post.timestamp = datetime.utcnow()   # update the time
         db.session.add(post)
+        db.session.commit()
         flash('The post has been updated.')
         return redirect(url_for('main.post', id = post.id))
     form.body.data = post.body
@@ -165,6 +170,7 @@ def delete_post(id):
             db.session.delete(comment)
         db.session.commit()
         db.session.delete(post)
+        db.session.commit()
         flash("You have deleted the post")
         return redirect(url_for('main.index'))
 
@@ -187,6 +193,7 @@ def delete_comment(id):
     else:
         id = comment.post_id
         db.session.delete(comment)
+        db.session.commit()
         flash("You have deleted the comment")
         return redirect(url_for('main.post', id = id))
 
@@ -203,6 +210,7 @@ def follow(username):
         return redirect(url_for('main.user', username = username))
         # the one way you push the 'follow' button is on main/user/username page
     current_user.follow(user)
+    db.session.commit()
     flash('You are now following %s.' % username)
     return redirect(url_for('main.user', username = username))
 
@@ -218,6 +226,7 @@ def unfollow(username):
         flash('You are not following this user.')
         return redirect(url_for('main.user', username = username))
     current_user.unfollow(user)
+    db.session.commit()
     flash('You are not following %s anymore.' % username)
     return redirect(url_for('main.user', username = username))
 
@@ -286,6 +295,7 @@ def moderate_comment_enable(id):
     comment = Comment.query.get_or_404(id)
     comment.disabled = False
     db.session.add(comment)
+    db.session.commit()
     return redirect(url_for('main.moderate_comments',
                             page = request.args.get('page', 1, type = int)))
 
@@ -296,6 +306,7 @@ def moderate_comment_disable(id):
     comment = Comment.query.get_or_404(id)
     comment.disabled = True
     db.session.add(comment)
+    db.session.commit()
     return redirect(url_for('main.moderate_comments',
                             page = request.args.get('page', 1, type = int)))
 
@@ -319,6 +330,7 @@ def moderate_post_enable(id):
     post = Post.query.get_or_404(id)
     post.disabled = False
     db.session.add(post)
+    db.session.commit()
     return redirect(url_for('main.moderate_posts',
                             page = request.args.get('page', 1, type = int)))
 
@@ -329,6 +341,7 @@ def moderate_post_disable(id):
     post = Post.query.get_or_404(id)
     post.disabled = True
     db.session.add(post)
+    db.session.commit()
     return redirect(url_for('main.moderate_posts',
                             page = request.args.get('page', 1, type = int)))
 

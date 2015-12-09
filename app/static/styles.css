@@ -77,6 +77,10 @@ div.comment-content {
     margin-left: 48px;
     min-height: 48px;
 }
+div.comment-content2 {
+    margin-left: 75px;
+    min-height: 60px;
+}
 div.comment-form {
     margin: 16px 0px 16px 32px;
 }

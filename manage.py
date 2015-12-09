@@ -53,10 +53,10 @@ def profile(length = 25, profile_dir = None):
                                       profile_dir = profile_dir)
     app.run()
 
-@manage.commamd
+@manager.command
 def deploy():
     """ Run deployment tasks."""
-    from flask.ext.migrate import ungrade
+    from flask.ext.migrate import upgrade
     from app.models import Role, User
 
     # migrate database to lastest revision

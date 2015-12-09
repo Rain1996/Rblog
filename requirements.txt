@@ -1,0 +1,4 @@
+-r requirements/pro.txt
+gunicorn==19.4.1
+psycopg2==2.5.1
+Flask-SSLify==0.1.4

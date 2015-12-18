@@ -17,3 +17,8 @@
 {% block write %}
 <li class="active"><a href="{{ url_for('main.write_blog', username=current_user.username) }}">Write Blog</a></li>
 {% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
